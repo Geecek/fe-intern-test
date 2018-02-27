@@ -26,3 +26,38 @@
     Good luck!
 
 */
+let currOffset = 0;
+let maxWidth = 450;
+let maxHeight = 300;
+//console.log('inner' + innerHeight);
+let currWidth = 0;
+let currHeight = 0;
+
+function loadPictures() {
+    $.getJSON('https://codewise-fe-api.herokuapp.com/photos?offset=' + currOffset + '&limit=50', function (pictures) {
+        for (let i = 0; i < pictures.length && currHeight <= window.innerHeight; i++) {
+            console.log(currWidth)
+            if (currWidth + maxWidth > window.innerWidth) {
+                currWidth = 0;
+                currHeight += maxHeight + 10;
+            }
+            currWidth += maxWidth;
+                console.log(pictures[i]);
+                currOffset += 1;
+                var pic = document.createElement('img');
+                pic.src = pictures[i].url;
+                document.getElementsByTagName('body')[0].appendChild(pic);
+                console.log($(document).innerHeight());
+        }    
+    //console.log(pictures);
+    });
+};
+
+loadPictures();
+
+window.onscroll = function() {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        loadPictures();
+        console.log(':)');
+    }
+};
